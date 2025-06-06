@@ -4,6 +4,7 @@ import '../../presentation/pages/users/users_page.dart';
 import '../../presentation/pages/user_detail/user_detail_page.dart';
 import '../../presentation/pages/posts/posts_page.dart';
 import '../../presentation/pages/posts/post_detail_page.dart';
+import '../../presentation/pages/posts/create_post_page.dart';
 import '../../presentation/pages/counter/counter_page.dart';
 import '../../presentation/pages/theme_demo/theme_demo_page.dart';
 import '../../presentation/shared/widgets/common/theme_showcase_widget.dart';
@@ -50,6 +51,12 @@ class RouteGenerator {
           );
         }
         return _errorRoute('Post ID is required');
+
+      case AppRoutes.createPost:
+        return MaterialPageRoute(
+          builder: (_) => const CreatePostPage(),
+          settings: settings,
+        );
 
       case AppRoutes.counter:
         return MaterialPageRoute(

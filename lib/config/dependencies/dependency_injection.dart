@@ -15,8 +15,10 @@ import '../../data/repositories/post_repository_impl.dart';
 import '../../domain/repositories/post_repository.dart';
 import '../../domain/usecases/get_posts_usecase.dart';
 import '../../domain/usecases/get_post_by_id_usecase.dart';
+import '../../domain/usecases/create_post_usecase.dart';
 import '../../presentation/pages/posts/bloc/posts_bloc.dart';
 import '../../presentation/pages/posts/bloc/post_detail_bloc.dart';
+import '../../presentation/pages/posts/bloc/create_post_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -62,6 +64,7 @@ Future<void> setupDependencies() async {
   // Post Use cases
   getIt.registerLazySingleton(() => GetPostsUseCase(getIt()));
   getIt.registerLazySingleton(() => GetPostByIdUseCase(getIt()));
+  getIt.registerLazySingleton(() => CreatePostUseCase(getIt()));
 
   // User ViewModels
   getIt.registerFactory(() => UserViewModel(
@@ -76,5 +79,9 @@ Future<void> setupDependencies() async {
   
   getIt.registerFactory(() => PostDetailBloc(
         getPostByIdUseCase: getIt(),
+      ));
+  
+  getIt.registerFactory(() => CreatePostBloc(
+        createPostUseCase: getIt(),
       ));
 } 
