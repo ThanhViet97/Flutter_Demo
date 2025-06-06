@@ -62,4 +62,28 @@ class PostRepositoryImpl implements PostRepository {
       return const Left(NetworkFailure('No internet connection'));
     }
   }
+
+  @override
+  Future<Either<Failure, PostEntity>> createPost({
+    required String title,
+    required String body,
+    required int userId,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final post = await remoteDataSource.createPost(
+          title: title,
+          body: body,
+          userId: userId,
+        );
+        return Right(post);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } catch (e) {
+        return Left(ServerFailure('Unexpected error occurred'));
+      }
+    } else {
+      return const Left(NetworkFailure('No internet connection'));
+    }
+  }
 } 

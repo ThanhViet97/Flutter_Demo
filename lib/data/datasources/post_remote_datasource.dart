@@ -8,6 +8,11 @@ abstract class PostRemoteDataSource {
   Future<List<PostModel>> getPosts();
   Future<PostModel> getPostById(int id);
   Future<List<PostModel>> getPostsByUserId(int userId);
+  Future<PostModel> createPost({
+    required String title,
+    required String body,
+    required int userId,
+  });
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
@@ -60,6 +65,33 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         return data.map((json) => PostModel.fromJson(json)).toList();
       } else {
         throw ServerException('Failed to load posts by user');
+      }
+    } on DioException catch (e) {
+      throw ServerException(e.message ?? 'Server error occurred');
+    } catch (e) {
+      throw ServerException('Unexpected error occurred');
+    }
+  }
+
+  @override
+  Future<PostModel> createPost({
+    required String title,
+    required String body,
+    required int userId,
+  }) async {
+    try {
+      final response = await apiClient.post(
+        ApiEndpoints.posts,
+        data: {
+          'title': title,
+          'body': body,
+          'userId': userId,
+        },
+      );
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return PostModel.fromJson(response.data);
+      } else {
+        throw ServerException('Failed to create post');
       }
     } on DioException catch (e) {
       throw ServerException(e.message ?? 'Server error occurred');

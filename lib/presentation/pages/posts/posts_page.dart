@@ -89,6 +89,19 @@ class _PostsPageView extends StatelessWidget {
           };
         },
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/create-post').then((_) {
+            // Refresh posts when returning from create post page
+            context.read<PostsBloc>().add(const RefreshPosts());
+          });
+        },
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.add),
+        label: const Text('New Post'),
+        elevation: 4,
+      ),
     );
   }
 } 
